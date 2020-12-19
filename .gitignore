@@ -1,0 +1,10 @@
+.env_des
+.env_test
+.env_hom
+.env
+config/doctrine.php
+vendor/
+var/cache
+var/log
+database.json
+composer.lock

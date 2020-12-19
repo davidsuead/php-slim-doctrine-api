@@ -1,0 +1,8 @@
+{
+    "APP_AMBIENTE": "desenv",
+    "APP_DATABASE_HOST": "localhost",
+    "APP_DATABASE_DATABASE": "",
+    "APP_DATABASE_USERNAME": "",
+    "APP_DATABASE_PASSWORD": "",
+    "APP_DATABASE_PORT": "3306"
+}

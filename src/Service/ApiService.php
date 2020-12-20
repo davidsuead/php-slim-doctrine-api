@@ -6,6 +6,7 @@ use Exception;
 use Slim\Http\Request;
 use App\Entity\Token;
 use App\Swagger\SwaggerDoc;
+use App\Validation\BreedsValidation;
 use App\Validation\LoginValidation;
 use App\Validation\RefreshTokenValidation;
 
@@ -106,7 +107,7 @@ class ApiService
                 $validation = new RefreshTokenValidation($this->container);
                 break;
             case $this->container->constante['SCENARIO']['GET_BREEDS']:
-                $validation = new LoginValidation($this->container);
+                $validation = new BreedsValidation($this->container);
                 break;
         }
         $this->container->validator->array($params, $validation->getRules());
@@ -184,6 +185,47 @@ class ApiService
         } catch (Exception $ex) {
             $this->container->em->rollback();
             $this->container->monolog->error('Erro durante a requisição da rota "refresh-token" ' . get_class($ex), [
+                'exception' => $ex
+            ]);
+            $statusCode = $this->container->constante['HTTP_STATUS_CODE']['INTERNAL_ERROR'];
+            $data['message'] = $ex->getMessage();
+        }
+
+        return ['data' => $data, 'statusCode' => $statusCode];
+    }
+    
+    /**
+     * Busca uma lista de raças de gatos por nome
+     *
+     * @param Request $request
+     * @return array[data,statusCode]
+     */
+    public function getBreeds(Request $request) : array
+    {
+        $this->container->em->beginTransaction();
+        try {
+            $statusCode = $this->validate($request, $this->container->constante['SCENARIO']['GET_BREEDS']);
+            if ($this->container->validator->isValid()) {
+                $params = $request->getParams();
+
+                $data = $this->container->breedService->getBreedsFromDb($params['name']);
+                if (empty($data['breeds']) || count($data['breeds']) == 0) {
+                    $response = $this->container->breedService->getBreedByName($params['name']);
+
+                    if ($response->code == 200 && $this->container->breedService->saveAll($response->body)) {
+                        $data = [
+                            'breeds' => $response->body
+                        ];
+                    }
+                }
+                $this->container->em->commit();
+            } 
+            else {
+                $data['message'] = $this->getApiErrors();
+            }
+        } catch (Exception $ex) {
+            $this->container->em->rollback();
+            $this->container->monolog->error('Erro durante a requisição da rota "breeds" ' . get_class($ex), [
                 'exception' => $ex
             ]);
             $statusCode = $this->container->constante['HTTP_STATUS_CODE']['INTERNAL_ERROR'];

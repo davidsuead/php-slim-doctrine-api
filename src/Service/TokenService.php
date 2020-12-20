@@ -51,10 +51,12 @@ class TokenService extends ModelService
         /** @var User $user */
         $user = $this->container->userService->getUserByUsername($username);
 
-        $expireDate = new DateTime();                
+        $expireDate = new DateTime();
+        $expireDate->modify('+ 1 hour');
         $accessTokenPayload = [
             'sub' => $user->getId(),
             'name' => $user->getUsername(),
+            "iat" => time(),
             'exp' => $expireDate->getTimestamp()
         ];
         $accessToken = JWT::encode($accessTokenPayload, $this->container->environment['APP_JWT_SECRET']);
@@ -96,5 +98,18 @@ class TokenService extends ModelService
             $this->container->environment['APP_JWT_SECRET'],
             ['HS256']
         );
+    }
+
+    /**
+     * Verifica se o access token é válido
+     *
+     * @param string $accessToken
+     * @return Token
+     */
+    public function getTokenByAccessToken(string $accessToken) : Token
+    {
+        return $this->getRepository()->findOneBy([
+            'token' => $accessToken
+        ]);
     }
 }

@@ -6,11 +6,11 @@ use Exception;
 use Slim\Http\Request;
 
 /**
- * Classe que define regras de validação do endpoint refresh-token
+ * Classe que define regras de validação do endpoint breeds
  * @author David Diniz <diniz.david@gmail.com>
  * @since 1.0.0
  */
-class RefreshTokenValidation extends ApiValidation
+class BreedsValidation extends ApiValidation
 {
     /**
      * {@inheritDoc}
@@ -18,8 +18,8 @@ class RefreshTokenValidation extends ApiValidation
     public function attributeRules() 
     {
         return [
-            ['notEmpty', ['refreshToken']],
-            ['length', ['refreshToken'], ['max' => 500]],
+            ['notEmpty', ['name']],
+            ['length', ['name'], ['max' => 20]],
         ];
     }
 
@@ -32,10 +32,8 @@ class RefreshTokenValidation extends ApiValidation
     public function customValidate(Request $request) : void
     {
         try {
-            $params = $request->getParams();
-            $this->validateRefreshToken($params['refreshToken']);
-            $refreshTokenDecoded = $this->container->tokenService->getRefreshTokenDecoded($params['refreshToken']);
-            $this->validateUsername($refreshTokenDecoded->name);
+            $accessToken = $request->getAttribute('jwt');
+            $this->validateUsername($accessToken['name']);
         } catch (Exception $ex) {
             $this->container->validator->addError('error', $ex->getMessage());
         }

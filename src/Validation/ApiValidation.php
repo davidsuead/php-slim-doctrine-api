@@ -21,20 +21,18 @@ class ApiValidation extends Validation
      * @return Token
      * @throws Exception
      */
-    protected function validateToken($accessToken)
+    protected function validateAccessToken($accessToken) : Token
     {
         /** @var Token $token */
-        $token = $this->container->tokenService->getRepository()->findOneBy([
-            'accessToken' => $accessToken
-        ]);
+        $token = $this->container->tokenService->getTokenByAccessToken($accessToken);
         
-        if(empty($token)) {
-            throw new Exception('O Token do usuário não foi encontrado no banco de dados');
+        if (empty($token)) {
+            throw new Exception('Access token inválido');
         }
 
-        // if (time() > $token->getTempoExpiracao()) {
-        //     throw new Exception('ACCESSTOKEN Expirado');
-        // }
+        if (time() > $token->getExpiredAt()->getTimestamp()) {
+            throw new Exception('Access token expirado');
+        }
 
         return $token;
     }

@@ -45,7 +45,7 @@ class BreedTag extends AbstractTag
             'retBreedList200' => [
                 'type' => 'object',
                 'properties' => [
-                    'usuarios' => [
+                    'breeds' => [
                         'type' => 'array',
                         'items' => [
                             '$ref' => '#/definitions/breedObject'

@@ -1,14 +1,22 @@
 <?php
 
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
+
 $app->add(new \Slim\Middleware\Session([
     'name' => 'dummy_session',
     'autorefresh' => true,
     'lifetime' => '1 hour'
 ]));
 
+$logger = new Logger("slim");
+$rotating = new RotatingFileHandler($app->getLogDir() . '/jwt-' . $app->getEnvironment() . '.log', 0, Logger::DEBUG);
+$logger->pushHandler($rotating);
+
 $app->add(new Tuupola\Middleware\JwtAuthentication([
     "path" => ["/breeds"],
     "attribute" => "jwt",
+    "logger" => $logger,
     "secure" => $container->environment['APP_ENV'] == 'dev' ? false : true,
     "secret" => $container->environment['APP_JWT_SECRET'],
     "error" => function ($response, $arguments) {

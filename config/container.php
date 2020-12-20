@@ -12,6 +12,7 @@ use Slim\Views\TwigExtension;
 use Twig\Extension\DebugExtension;
 use SlimSession\Helper;
 use App\Service\ApiService;
+use App\Service\BreedService;
 use App\Service\TokenService;
 use App\Service\UserService;
 use App\Service\UtilService;
@@ -105,4 +106,8 @@ $container['userService'] = function ($container) {
 
 $container['tokenService'] = function ($container) {
     return new TokenService($container);
+};
+
+$container['breedService'] = function ($container) {
+    return new BreedService($container);
 };

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Awurth\Slim\Helper\Controller\Controller;
+use Exception;
 
 class ApiController extends Controller 
 {
@@ -54,7 +55,17 @@ class ApiController extends Controller
      */
     public function getBreeds(Request $request, Response $response) : Response
     {
-        $result = $this->container->apiService->getBreeds($request);
-        return $response->withJson($result['data'], $result['statusCode']);
+        try {
+            $result = $this->container->apiService->getBreeds($request);
+            return $response->withJson($result['data'], $result['statusCode']);
+        } 
+        catch (Exception $ex) {
+            $this->container->monolog->error('Erro durante a requisição da rota "breeds" ' . get_class($ex), [
+                'exception' => $ex
+            ]);
+            $statusCode = $this->container->constante['HTTP_STATUS_CODE']['INTERNAL_ERROR'];
+            $data['message'] = $ex->getMessage();
+            return $response->withJson($data, $statusCode);
+        }
     }
 }

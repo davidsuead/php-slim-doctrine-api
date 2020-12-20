@@ -1,6 +1,6 @@
 <?php
 
-$json = file_get_contents('../database.json');
+$json = file_get_contents($app->rootDir . '/database.json');
 $database = json_decode($json);
 
 return [

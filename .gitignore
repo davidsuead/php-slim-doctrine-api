@@ -9,3 +9,4 @@ var/log
 database.json
 composer.lock
 public/useful.php
+.phpunit.result.cache

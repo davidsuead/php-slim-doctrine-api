@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS breed(
 	breed_hairless SMALLINT,
 	breed_health_issues SMALLINT,
 	breed_hypoallergenic SMALLINT,
-	breed_breed_id VARCHAR(100),
+	breed_id VARCHAR(100),
 	breed_indoor SMALLINT,
 	breed_intelligence SMALLINT,
 	breed_lap SMALLINT,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS breed(
 	breed_vcahospitals_url VARCHAR(100),
 	breed_vetstreet_url VARCHAR(100),
 	breed_vocalisation SMALLINT,
-	breed_wikipedia_url SMALLINT,
+	breed_wikipedia_url VARCHAR(100),
 	breed_weight_imperial VARCHAR(100),
 	breed_weight_metric VARCHAR(100)
 );

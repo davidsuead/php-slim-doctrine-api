@@ -58,7 +58,18 @@ class SwaggerDoc
     private function getTagsOptions() 
     {
         return [
-
+            'auth' => [
+                'sequence' => 0,
+                'name' => "Authentication",
+                'description' => "Authentication APIs",
+                'className' => AuthTag::class,
+            ],
+            'breed' => [
+                'sequence' => 0,
+                'name' => "Breeds",
+                'description' => "Breed APIs",
+                'className' => BreedTag::class,
+            ],
         ];
     }
 
@@ -71,11 +82,11 @@ class SwaggerDoc
     private function setInfo() 
     {
         $this->swagger->info = new \stdClass();
-        $this->swagger->info->description = "API de integração da {$this->container->environment->get('APP_NOME_SISTEMA')}";
+        $this->swagger->info->description = "{$this->container->environment->get('APP_NOME_SISTEMA')}";
         $this->swagger->info->version = "1.0.0";
         $this->swagger->info->title = "{$this->container->environment->get('APP_SISTEMA_API')} - {$this->container->environment->get('APP_NOME_SISTEMA')}";
         $this->swagger->info->license = new \stdClass();
-        $this->swagger->info->license->name = "© Copyright " . date('Y') . " Todos os direitos reservados. Desenvolvido por David Diniz";
+        $this->swagger->info->license->name = "© Copyright " . date('Y') . " David Diniz. All Rights Reserved.";
         $this->swagger->info->license->url = $this->container->environment->get('APP_URL_SISTEMA');
     }
 

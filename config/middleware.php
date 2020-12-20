@@ -7,16 +7,13 @@ $app->add(new \Slim\Middleware\Session([
 ]));
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
-    "ignore" => ["/", "swagger", "/login", "/refresh-token"],
+    "path" => ["/breeds"],
     "attribute" => "jwt",
     "secure" => $container->environment['APP_ENV'] == 'dev' ? false : true,
-    "secret" => $container->environment['JWT_SECRET'],
+    "secret" => $container->environment['APP_JWT_SECRET'],
     "error" => function ($response, $arguments) {
-        $data["success"] = false;
-        $data["response"] = $arguments["message"];
-        $data["status_code"] = "401";
-
-        return $response->withHeader("Content-type","application/json")
+        $data["message"] = $arguments["message"];
+        return $response->withHeader("Content-type", "application/json")
             ->getBody()->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
     }
 ]));

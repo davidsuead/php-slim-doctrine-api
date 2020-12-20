@@ -18,4 +18,19 @@ class ApiController extends Controller
     {
         return $response->withJson($this->container->apiService->swaggerDoc(), 200);
     }
+
+    public function login(Request $request, Response $response)
+    {
+        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+    }
+    
+    public function refreshToken(Request $request, Response $response)
+    {
+        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+    }
+
+    public function getBreeds(Request $request, Response $response)
+    {
+        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+    }
 }

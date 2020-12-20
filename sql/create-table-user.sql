@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS user(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	username VARCHAR(100) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL
+);
+INSERT INTO user (username, password) VALUES ('admin', '$2y$10$N15FXdpqsNj0QqsxV0F4g.nWlGhc/EnuTLEA/pgLnrZ0mQ/bLapGK');

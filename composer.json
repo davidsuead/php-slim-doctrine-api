@@ -26,7 +26,8 @@
         "bryanjhv/slim-session": "3.6.*",
         "php-webdriver/webdriver": "1.8.*",
         "phpseclib/phpseclib": "2.0.*",
-        "doctrine/migrations": "^3.0"
+        "doctrine/migrations": "^3.0",
+        "tuupola/slim-jwt-auth": "^3.5"
     },
     "require-dev": {
         "phpunit/phpunit": "8.5.*",

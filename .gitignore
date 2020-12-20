@@ -8,3 +8,4 @@ var/cache
 var/log
 database.json
 composer.lock
+public/useful.php

@@ -13,7 +13,7 @@ return [
         'execution_time_column_name' => 'execution_time',
     ],
     'migrations_paths' => [
-        'CatApi\Migrations' => __DIR__ . '/db/migrations',
+        'App\Migrations' => __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Migrations',
     ],
     'all_or_nothing' => true,
     'check_database_platform' => true

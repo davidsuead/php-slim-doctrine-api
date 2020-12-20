@@ -8,7 +8,7 @@ $cache = new \Doctrine\Common\Cache\ArrayCache();
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl($cache);
-$driverImpl = $config->newDefaultAnnotationDriver($paths);
+$driverImpl = $config->newDefaultAnnotationDriver($paths, false);
 $config->setMetadataDriverImpl($driverImpl);
 $config->setQueryCacheImpl($cache);
 $config->setResultCacheImpl($cache);

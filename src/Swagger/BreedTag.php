@@ -14,7 +14,7 @@ class BreedTag extends AbstractTag
      *
      * @return void
      */
-    private function setBreeds()
+    private function setBreeds() : void
     {
         $pathName = "/breeds";
 
@@ -117,7 +117,7 @@ class BreedTag extends AbstractTag
      *
      * @return void
      */
-    public function setRoutes()
+    public function setRoutes() : void
     {
         $this->setBreeds();
     }

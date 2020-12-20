@@ -4,8 +4,8 @@ namespace App\Validation;
 
 use Exception;
 use Slim\Http\Request;
-use App\Entity\Usuario;
-use App\Entity\UsuarioToken;
+use App\Entity\User;
+use App\Entity\Token;
 
 /**
  * Classe de validação para parâmetros de requisição em API Rest
@@ -15,103 +15,40 @@ use App\Entity\UsuarioToken;
 class ApiValidation extends Validation
 {
     /**
-     * Verifica se o token acesso é válido
+     * Verifica se o token de acesso é válido
      *
      * @param Request $request
      * @return void
      * @throws Exception
      */
-    protected function validateAuthorization(Request $request)
+    protected function validateAuthorization(Request $request) : void
     {
-        $validaChavePortal = $this->container->apiService->validaAuthorization($request->getHeaders());
+        $headers = $request->getHeaders();
+        $chave = $headers['HTTP_AUTHORIZATION'][0]; //chave de autorização de consulta
+        $chave = explode(" ", $chave);
         
-        if ($validaChavePortal['codeStatus'] != 200) {
-            $this->code =  $validaChavePortal['codeStatus'];
-            throw new Exception($validaChavePortal['msg']);                
+        if (strpos("Bearer", trim($chave[0])) === false) {
+            $this->code = 401;
+            throw new Exception('A autorização foi negada para esta solicitação');
         }
-    }
-
-    /**
-     * Valida o parâmetro numrCpf
-     *
-     * @param string $numrCpf
-     * @param int|null $idUsuario
-     * @param boolean $isNewUser
-     * @return Usuario|null
-     * @throws Exception
-     */
-    protected function validateNumCpf($numrCpf, $idUsuario = null, $isNewUser = false)
-    {
-        if (!$this->container->validaService->isCpf($numrCpf)) {
-            throw new Exception('CPF inválido');
+        
+        if ($chave[1] != $this->container->environment->get('APP_TOKEN_API')) {
+            $this->code = 401;
+            throw new Exception('A autorização foi negada para esta solicitação'); 
         }
-
-        /** @var Usuario $usuario */
-        $usuario = $this->container->usuarioService->getRepository()->findOneBy([
-            'numrCpf' => $this->container->utilService->limpaCpfCpnj($numrCpf)
-        ]);
-
-        if ($isNewUser && !empty($usuario)) {
-            throw new Exception('CPF já existe no banco de dados');
-        }
-
-        if (!$isNewUser) {
-            if (empty($usuario)) {
-                throw new Exception('CPF não foi encontrado no banco de dados');
-            }
-    
-            if (!empty($idUsuario) && $usuario->getIdUsuario() != $idUsuario) {
-                throw new Exception('CPF já pertence a outro usuário');
-            }
-        }
-
-        return $usuario;
-    }
-
-    /**
-     * Valida o parâmetro emailUsuario
-     *
-     * @param string $emailUsuario
-     * @param int|null $idUsuario
-     * @param boolean $isNewUser
-     * @return Usuario|null
-     * @throws Exception
-     */
-    protected function validateEmail($emailUsuario, $idUsuario = null, $isNewUser = false)
-    {
-        /** @var Usuario $usuario */
-        $usuario = $this->container->usuarioService->getRepository()->findOneBy([
-            'descEmail' => $emailUsuario
-        ]);
-
-        if ($isNewUser && !empty($usuario)) {
-            throw new Exception('E-mail já existe no banco de dados');
-        }
-
-        if (!$isNewUser) {
-            if (empty($usuario)) {
-                throw new Exception('E-mail não foi encontrado no banco de dados');
-            }
-    
-            if (!empty($idUsuario) && $usuario->getIdUsuario() != $idUsuario) {
-                throw new Exception('E-mail já pertence a outro usuário');
-            }
-        }
-
-        return $usuario;
     }
 
     /**
      * Valida o parâmetro accessToken
      *
      * @param string $accessToken
-     * @return UsuarioToken
+     * @return Token
      * @throws Exception
      */
-    protected function validateAccessToken($accessToken)
+    protected function validateToken($accessToken)
     {
-        /** @var UsuarioToken $token */
-        $token = $this->container->usuarioTokenService->getRepository()->findOneBy([
+        /** @var Token $token */
+        $token = $this->container->tokenService->getRepository()->findOneBy([
             'accessToken' => $accessToken
         ]);
         
@@ -127,35 +64,52 @@ class ApiValidation extends Validation
     }
 
     /**
-     * Valida o parâmetro idUsuario
+     * Valida o User id (primary key)
      *
-     * @param int $idUsuario
-     * @return Usuario
+     * @param int $userId
+     * @return User
      * @throws Exception
      */
-    protected function validateIdUsuario($idUsuario)
+    protected function validateUserId(int $userId) : User
     {
-        /** @var Usuario $usuario */
-        $usuario = $this->container->usuarioService->buscar($idUsuario);
+        /** @var User $usuario */
+        $user = $this->container->userService->buscar($userId);
         
-        if(empty($usuario)) {
+        if (empty($user)) {
             throw new Exception('ID do usuário não foi encontrado no banco de dados');
         }
 
-        return $usuario;
+        return $user;
+    }
+
+    /**
+     * Valida o usuário
+     *
+     * @param string $username
+     * @return User
+     */
+    protected function validateUsername(string $username) : User
+    {
+        $user = $this->container->userService->getUserByUsername($username);
+
+        if (empty($user)) {
+            throw new Exception('Usuário inválido.');
+        }
+
+        return $user;
     }
 
     /**
      * Valida a senha do usuário
      *
-     * @param string $emailUsuario
+     * @param string $username
      * @param string $password
      * @return void
      * @throws Exception
      */
-    protected function validatePassword($emailUsuario, $password)
+    protected function validatePassword(string $username, string $password) : void
     {
-        if (!$this->container->usuarioService->verifyPassword($emailUsuario, $password)) {
+        if (!$this->container->userService->verifyPassword($username, $password)) {
             throw new Exception('Senha inválida.');
         }
     }

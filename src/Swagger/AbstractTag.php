@@ -109,7 +109,7 @@ abstract class AbstractTag
      *
      * @return void
      */
-    abstract public function setRoutes();
+    abstract public function setRoutes() : void;
 
     /**
      * Define um parâmetro de um $pathName

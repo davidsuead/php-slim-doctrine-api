@@ -21,7 +21,7 @@ class AuthTag extends AbstractTag
         $path = new \stdClass();
         $path->post = new \stdClass();
         $path->post->tags = ["{$this->tag['name']}"];
-        $path->post->summary = "User authentication";
+        $path->post->summary = "User login";
         $path->post->description = "Endpoint que autentica usuário e retorna um token jwt";
         $path->post->operationId = "postLogin";
         $path->post->produces = ["application/json"];
@@ -29,14 +29,26 @@ class AuthTag extends AbstractTag
 
         $this->setParameters($pathName, [
             [
-                'name' => 'username',
-                'description' => 'Nome do usuário',
-            ],
-            [
-                'name' => 'password',
-                'description' => 'Senha do usuário',
-            ],
+                'name' => 'Parametros',
+                'description' => 'Objeto com dados para persistência',
+                'type' => false,
+                'in' => 'body',
+                'schema' => [
+                    '$ref' => "#/definitions/paramsUploadBiometria"
+                ],
+            ]
         ], true, 'post');
+
+        $definitions = [
+            'paramsUploadBiometria' => [
+                'type' => 'object',
+                'properties' => [
+                    'username' => ['type' => 'string'],
+                    'password' => ['type' => 'string'],
+                ]
+            ],
+        ];
+        $this->setDefintions($definitions);
 
         // HTTP Response (200) Success
         $this->setDefaultResponse($pathName, 200,'retLogin200', [
@@ -72,10 +84,6 @@ class AuthTag extends AbstractTag
 
         $this->setParameters($pathName, [
             [
-                'name' => 'accessToken',
-                'description' => 'Token acesso',
-            ],
-            [
                 'name' => 'refreshToken',
                 'description' => 'Token de atualização',
             ],
@@ -100,7 +108,7 @@ class AuthTag extends AbstractTag
      *
      * @return void
      */
-    public function setRoutes()
+    public function setRoutes() : void
     {
         $this->setLogin();
         $this->setRefreshToken();

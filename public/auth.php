@@ -2,7 +2,7 @@
 @session_start();
 error_reporting(0);
 if (isset($_POST['user']) && isset($_POST['senha'])) {
-    if ($_POST['user'] == 'apisoluti' && $_POST['senha'] == 'provaPratica') {
+    if ($_POST['user'] == 'phpslim' && $_POST['senha'] == 'letsgo') {
         $_SESSION['AUTH'] = true;
     }
 }

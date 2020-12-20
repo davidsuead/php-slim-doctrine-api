@@ -12,6 +12,8 @@ use Slim\Views\TwigExtension;
 use Twig\Extension\DebugExtension;
 use SlimSession\Helper;
 use App\Service\ApiService;
+use App\Service\TokenService;
+use App\Service\UserService;
 use App\Service\UtilService;
 use App\Service\ValidaService;
 
@@ -95,4 +97,12 @@ $container['utilService'] = function ($container) {
 
 $container['validaService'] = function ($container) {
     return new ValidaService();
+};
+
+$container['userService'] = function ($container) {
+    return new UserService($container);
+};
+
+$container['tokenService'] = function ($container) {
+    return new TokenService($container);
 };

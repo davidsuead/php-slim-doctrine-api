@@ -40,7 +40,7 @@ class SwaggerDoc
         $this->swagger = new stdClass();
         $this->swagger->swagger = "2.0";
         $this->swagger->host = str_replace('https://', '', str_replace('http://', '', $this->container->environment->get('APP_URL_SISTEMA')));
-        $this->swagger->basePath = "api/1.0.0";
+        $this->swagger->basePath = "/";
 
         if($this->container->environment->get('APP_ENV') == 'dev') {
             $this->swagger->schemes = ["http", "https"];

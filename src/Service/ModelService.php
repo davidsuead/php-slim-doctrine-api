@@ -34,13 +34,6 @@ class ModelService
     protected $_errors = array();
 
     /**
-     * Relação nome da coluna no banco de dados com o parâmetro utilizado na API
-     *
-     * @var array
-     */
-    protected $colsToParams = [];
-
-    /**
      * Cria instância da service e define a entidade
      * 
      * @param ContainerInterface $container
@@ -83,17 +76,6 @@ class ModelService
         return $this->_errors;
     }
 
-    /**
-     * Retorna a descrição do parâmetro relacionado ao nome do campo
-     *
-     * @param string $name - Nome da coluna no banco de dados
-     * @return string
-     */
-    public function getParamName($name)
-    {
-        return $this->colsToParams[$name] ?? $name;
-    }
-    
     /**
      * Obtém objeto da entidade definida
      *
@@ -161,25 +143,5 @@ class ModelService
         return $dados;
     }
 
-    /**
-     * Retorna o primeiro erro encontrado da validação dos parâmetros de entrada
-     *
-     * @return string|null
-     */
-    public function getApiErrors()
-    {
-        if(!$this->container->validator->isValid()) {
-            $errors = $this->container->validator->getErrors();
-            foreach($errors as $field => $error) {
-                foreach($error as $message) {
-                    if($field == 'error') {
-                        return $message;
-                    } else {
-                        return $this->getParamName($field) . ': ' . $message;
-                    }
-                }
-            }
-        }
-        return null;
-    }
+
 }

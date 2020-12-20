@@ -18,10 +18,18 @@ class ApiController extends Controller
     {
         return $response->withJson($this->container->apiService->swaggerDoc(), 200);
     }
-
-    public function login(Request $request, Response $response)
+    
+    /**
+     * Realiza o login do usuário
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function login(Request $request, Response $response) : Response
     {
-        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+        $result = $this->container->apiService->login($request);
+        return $response->withJson($result['data'], $result['statusCode']);
     }
     
     public function refreshToken(Request $request, Response $response)

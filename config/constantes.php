@@ -7,4 +7,9 @@ return [
         'VALID' => 200,
         'INTERNAL_ERROR' => 500
     ],
+    'SCENARIO' => [
+        'LOGIN' => 'login',
+        'REFRESH_TOKEN' => 'refreshToken',
+        'GET_BREEDS' => 'getBreeds',
+    ],
 ];

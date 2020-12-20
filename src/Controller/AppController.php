@@ -9,67 +9,67 @@ use Awurth\Slim\Helper\Controller\Controller;
 class AppController extends Controller 
 {
     /**
-     * Página Principal do Portal
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página inicial da aplicação
+     * @param Request $request
+     * @param Response $response
+     * @return Response
      */
-    public function index(Request $request, Response $response) 
+    public function index(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/index.twig');
     }
 
     /**
-     * Página Erro 401
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página de erro 401
+     * @param Request $request
+     * @param Response $response
+     * @return Response
      */
-    public function error401(Request $request, Response $response) 
+    public function error401(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/error/401.twig');
     }
 
     /**
-     * Página Erro 403
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página de erro 403
+     * @param Request $request Classe Request Slim
+     * @param Response $response Classe Response Slim
+     * @return Response
      */
-    public function error403(Request $request, Response $response) 
+    public function error403(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/error/403.twig');
     }
 
     /**
-     * Página Erro 404
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página de erro 404
+     * @param Request $request
+     * @param Response $response
+     * @return Response
      */
-    public function error404(Request $request, Response $response) 
+    public function error404(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/error/404.twig');
     }
 
     /**
-     * Página Erro 4xx
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página de erro 4xx
+     * @param Request $request
+     * @param Response $response
+     * @return Response
      */
-    public function error4xx(Request $request, Response $response) 
+    public function error4xx(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/error/4xx.twig');
     }
 
     /**
-     * Página Erro 500
-     * @param class $request Classe Request Slim
-     * @param class $response Classe Response Slim
-     * @return view Página
+     * Carrega a página de erro 500
+     * @param Request $request
+     * @param Response $response
+     * @return Response
      */
-    public function error500(Request $request, Response $response) 
+    public function error500(Request $request, Response $response) : Response
     {
         return $this->render($response, 'app/error/500.twig');
     }

@@ -17,7 +17,7 @@ class Application extends App
     protected $rootDir;
 
     /**
-     * Constructor.
+     * Inicializando a aplicação
      *
      * @param string $environment
      */
@@ -36,27 +36,53 @@ class Application extends App
         $this->configureDoctrine();
     }
 
-    public function getCacheDir() 
+    /**
+     * Retorna o caminho da pasta cache para o uso do Twig
+     *
+     * @return string
+     */
+    public function getCacheDir() : string
     {
         return $this->getRootDir() . '/var/cache/' . $this->environment;
     }
 
-    public function getConfigurationDir() 
+    /**
+     * Retorna o caminho da pasta de configuração da aplicação
+     *
+     * @return string
+     */
+    public function getConfigurationDir() : string
     {
         return $this->getRootDir() . '/config';
     }
 
-    public function getEnvironment() 
+    /**
+     * Retorna o tipo de ambiente: dev, test, hom ou prod
+     *
+     * @return string
+     */
+    public function getEnvironment() : string
     {
         return $this->environment;
     }
 
-    public function getLogDir() 
+    /**
+     * Retorna o caminho da pasta que armazena os logs da aplicação
+     *
+     * @return string
+     */
+    public function getLogDir() : string
     {
         return $this->getRootDir() . '/var/log';
     }
 
-    public function getRootDir() 
+    /**
+     * Retorna o caminho do diretório raiz da aplicação e
+     * injeta no container o caminho do diretório raiz
+     *
+     * @return string
+     */
+    public function getRootDir() : string
     {
         if (null === $this->rootDir) {
             $this->rootDir = dirname(__DIR__);
@@ -67,14 +93,24 @@ class Application extends App
         return $this->rootDir;
     }
 
-    protected function configureContainer() 
+    /**
+     * Carrega o container da aplicação
+     *
+     * @return void
+     */
+    protected function configureContainer() : void
     {
         $app = $this;
         $container = $this->getContainer();
         require $this->getConfigurationDir() . '/container.php';
     }
-
-    protected function loadConfiguration() 
+    
+    /**
+     * Retorna as configurações do Slim
+     *
+     * @return array
+     */
+    protected function loadConfiguration() : array
     {
         $app = $this;
         $configuration = [
@@ -89,21 +125,36 @@ class Application extends App
         return $configuration;
     }
 
-    protected function loadMiddleware() 
+    /**
+     * Carrega o middleware da aplicação
+     *
+     * @return void
+     */
+    protected function loadMiddleware() : void
     {
         $app = $this;
         $container = $this->getContainer();
         require $this->getConfigurationDir() . '/middleware.php';
     }
 
-    protected function loadRoutes() 
+    /**
+     * Carrega as rotas da aplicação
+     *
+     * @return void
+     */
+    protected function loadRoutes() : void
     {
         $app = $this;
         $container = $this->getContainer();
         require $this->getConfigurationDir() . '/routes.php';
     }
 
-    protected function registerControllers() 
+    /**
+     * Carrega as controllers da aplicação
+     *
+     * @return void
+     */
+    protected function registerControllers() : void
     {
         $container = $this->getContainer();
         $app = $this;
@@ -117,13 +168,23 @@ class Application extends App
         }
     }
 
-    protected function registerHandlers() 
+    /**
+     * Carrega os handlers da aplicação
+     *
+     * @return void
+     */
+    protected function registerHandlers() : void
     {
         $container = $this->getContainer();
         require $this->getConfigurationDir() . '/handlers.php';
     }
 
-    protected function configureDoctrine() 
+    /**
+     * Carrega as configurações do doctrine
+     *
+     * @return void
+     */
+    protected function configureDoctrine() : void
     {
         $app = $this;
         $container = $this->getContainer();
@@ -133,7 +194,12 @@ class Application extends App
         };
     }
 
-    protected function loadConstantes() 
+    /**
+     * Carrega as constantes da aplicação
+     *
+     * @return void
+     */
+    protected function loadConstantes() : void
     {
         $app = $this;
         $container = $this->getContainer();

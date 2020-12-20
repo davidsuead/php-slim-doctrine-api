@@ -84,7 +84,7 @@ if (!isset($_SERVER['APP_ENV'])) {
         window.onload = function () {
             // Build a system
             const ui = SwaggerUIBundle({
-                url: "<?php echo $_SERVER['APP_URL_SISTEMA'] ?>/api/swagger",
+                url: "<?php echo $_SERVER['APP_URL_SISTEMA'] ?>/swagger",
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [

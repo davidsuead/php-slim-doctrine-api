@@ -10,11 +10,9 @@ $app->group('/', function () {
     $this->get('404', 'app.controller:error404')->setName('app.404');
     $this->get('4xx', 'app.controller:error4xx')->setName('app.4xx');
     $this->get('500', 'app.controller:error500')->setName('app.500');
+    $this->get('swagger', 'api.controller:swagger')->setName('api.swagger');
+    $this->get('login', 'api.controller:login')->setName('api.login');
+    $this->get('refresh-token', 'api.controller:refreshToken')->setName('api.refreshToken');
+    $this->get('breed', 'api.controller:getBreed')->setName('api.getBreed');
 });
 
-/**
- * Rotas API
- */
-$app->group('/api', function () {
-    $this->get('/swagger', 'api.controller:swagger')->setName('api.swagger');
-});

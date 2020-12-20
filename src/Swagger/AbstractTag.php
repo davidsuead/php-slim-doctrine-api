@@ -80,7 +80,7 @@ abstract class AbstractTag
      */
     private $paramAuth = [
         'name' => 'Authorization',
-        'description' => 'Token para acesso: Bearer {token} . Ex.: Bearer q223i4wkkwem23',
+        'description' => 'Token JWT: {token} . Ex.: q223i4wkkwem23.sdjkçasjd...',
         'in' => 'header'
     ];
 

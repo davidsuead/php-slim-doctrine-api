@@ -7,6 +7,7 @@ use Slim\Http\Request;
 use App\Entity\Token;
 use App\Swagger\SwaggerDoc;
 use App\Validation\LoginValidation;
+use App\Validation\RefreshTokenValidation;
 
 /**
  * Service para manipular Regras de Negócio de APIs
@@ -102,6 +103,8 @@ class ApiService
                 $validation = new LoginValidation($this->container);
                 break;
             case $this->container->constante['SCENARIO']['REFRESH_TOKEN']:
+                $validation = new RefreshTokenValidation($this->container);
+                break;
             case $this->container->constante['SCENARIO']['GET_BREEDS']:
                 $validation = new LoginValidation($this->container);
                 break;
@@ -141,6 +144,46 @@ class ApiService
         } catch (Exception $ex) {
             $this->container->em->rollback();
             $this->container->monolog->error('Erro durante a requisição da rota "login" ' . get_class($ex), [
+                'exception' => $ex
+            ]);
+            $statusCode = $this->container->constante['HTTP_STATUS_CODE']['INTERNAL_ERROR'];
+            $data['message'] = $ex->getMessage();
+        }
+
+        return ['data' => $data, 'statusCode' => $statusCode];
+    }
+
+    /**
+     * Atualiza o access token do usuário
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function refreshToken(Request $request) : array
+    {
+        $this->container->em->beginTransaction();
+        try {
+            $statusCode = $this->validate($request, $this->container->constante['SCENARIO']['REFRESH_TOKEN']);
+            if ($this->container->validator->isValid()) {
+                $params = $request->getParams();
+
+                $refreshTokenDecoded = $this->container->tokenService->getRefreshTokenDecoded($params['refreshToken']);
+                
+                /** @var Token $token */
+                $token = $this->container->tokenService->generateToken($refreshTokenDecoded->name);
+
+                $data = [
+                    'accessToken' => $token->getToken(),
+                    'refreshToken' => $token->getRefreshToken()
+                ];
+                $this->container->em->commit();
+            } 
+            else {
+                $data['message'] = $this->getApiErrors();
+            }
+        } catch (Exception $ex) {
+            $this->container->em->rollback();
+            $this->container->monolog->error('Erro durante a requisição da rota "refresh-token" ' . get_class($ex), [
                 'exception' => $ex
             ]);
             $statusCode = $this->container->constante['HTTP_STATUS_CODE']['INTERNAL_ERROR'];

@@ -6,11 +6,11 @@ use Exception;
 use Slim\Http\Request;
 
 /**
- * Classe que define regras de validação do endpoint login
+ * Classe que define regras de validação do endpoint refresh-token
  * @author David Diniz <diniz.david@gmail.com>
  * @since 1.0.0
  */
-class LoginValidation extends ApiValidation
+class RefreshTokenValidation extends ApiValidation
 {
     /**
      * {@inheritDoc}
@@ -18,9 +18,8 @@ class LoginValidation extends ApiValidation
     public function attributeRules() 
     {
         return [
-            ['notEmpty', ['username','password']],
-            ['length', ['username'], ['max' => 50]],
-            ['length', ['password'], ['max' => 20]]
+            ['notEmpty', ['refreshToken']],
+            ['length', ['refreshToken'], ['max' => 500]],
         ];
     }
 
@@ -34,8 +33,11 @@ class LoginValidation extends ApiValidation
     {
         try {
             $params = $request->getParams();
-            $this->validateUsername($params['username']);
-            $this->validatePassword($params['username'], $params['password']);
+            $this->validateRefreshToken($params['refreshToken']);
+            $refreshTokenDecoded = $this->container->tokenService->getRefreshTokenDecoded($params['refreshToken']);
+            // echo $params['refreshToken'];
+            // die;
+            $this->validateUsername($refreshTokenDecoded->name);
         } catch (Exception $ex) {
             $this->container->validator->addError('error', $ex->getMessage());
         }

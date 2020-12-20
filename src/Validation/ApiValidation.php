@@ -15,30 +15,6 @@ use App\Entity\Token;
 class ApiValidation extends Validation
 {
     /**
-     * Verifica se o token de acesso é válido
-     *
-     * @param Request $request
-     * @return void
-     * @throws Exception
-     */
-    protected function validateAuthorization(Request $request) : void
-    {
-        $headers = $request->getHeaders();
-        $chave = $headers['HTTP_AUTHORIZATION'][0]; //chave de autorização de consulta
-        $chave = explode(" ", $chave);
-        
-        if (strpos("Bearer", trim($chave[0])) === false) {
-            $this->code = 401;
-            throw new Exception('A autorização foi negada para esta solicitação');
-        }
-        
-        if ($chave[1] != $this->container->environment->get('APP_TOKEN_API')) {
-            $this->code = 401;
-            throw new Exception('A autorização foi negada para esta solicitação'); 
-        }
-    }
-
-    /**
      * Valida o parâmetro accessToken
      *
      * @param string $accessToken
@@ -111,6 +87,19 @@ class ApiValidation extends Validation
     {
         if (!$this->container->userService->verifyPassword($username, $password)) {
             throw new Exception('Senha inválida.');
+        }
+    }
+
+    /**
+     * Valida o refresh token
+     *
+     * @param string $refreshToken
+     * @return void
+     */
+    protected function validateRefreshToken(string $refreshToken) : void
+    {
+        if (!$this->container->tokenService->verifyRefreshToken($refreshToken)) {
+            throw new Exception('Refresh token inválido.');
         }
     }
 }

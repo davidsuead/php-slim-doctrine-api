@@ -32,7 +32,7 @@ class BreedTag extends AbstractTag
                 'name' => 'name',
                 'description' => 'Breed name',
             ]
-            ], false);
+        ]);
 
         // HTTP Response (200) Success
         $arrResponse = [

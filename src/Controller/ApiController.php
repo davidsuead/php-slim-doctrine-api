@@ -32,13 +32,29 @@ class ApiController extends Controller
         return $response->withJson($result['data'], $result['statusCode']);
     }
     
-    public function refreshToken(Request $request, Response $response)
+    /**
+     * Atualiza o access token do usuário
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function refreshToken(Request $request, Response $response) : Response
     {
-        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+        $result = $this->container->apiService->refreshToken($request);
+        return $response->withJson($result['data'], $result['statusCode']);
     }
 
-    public function getBreeds(Request $request, Response $response)
+    /**
+     * Retorna lista de objeto de raças de gato pelo nome
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function getBreeds(Request $request, Response $response) : Response
     {
-        return $response->withJson($this->container->apiService->swaggerDoc(), 200);
+        $result = $this->container->apiService->getBreeds($request);
+        return $response->withJson($result['data'], $result['statusCode']);
     }
 }

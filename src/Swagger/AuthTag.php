@@ -34,13 +34,13 @@ class AuthTag extends AbstractTag
                 'type' => false,
                 'in' => 'body',
                 'schema' => [
-                    '$ref' => "#/definitions/paramsUploadBiometria"
+                    '$ref' => "#/definitions/paramsLogin"
                 ],
             ]
-        ], true, 'post');
+        ], false, 'post');
 
         $definitions = [
-            'paramsUploadBiometria' => [
+            'paramsLogin' => [
                 'type' => 'object',
                 'properties' => [
                     'username' => ['type' => 'string'],
@@ -87,7 +87,7 @@ class AuthTag extends AbstractTag
                 'name' => 'refreshToken',
                 'description' => 'Token de atualização',
             ],
-        ], true, 'post');
+        ], false, 'post');
 
         // HTTP Response (200) Success
         $this->setDefaultResponse($pathName, 200,'retRefreshToken200', [

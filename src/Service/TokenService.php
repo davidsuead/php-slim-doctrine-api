@@ -57,14 +57,44 @@ class TokenService extends ModelService
             'name' => $user->getUsername(),
             'exp' => $expireDate->getTimestamp()
         ];
-        $accessToken = JWT::encode($accessTokenPayload, $this->container->environment['JWT_SECRET_KEY']);
+        $accessToken = JWT::encode($accessTokenPayload, $this->container->environment['APP_JWT_SECRET']);
 
         $refreshTokenPayload = [
             'name' => $user->getUsername(),
             'ramdom' => uniqid()
         ];
-        $refreshToken = JWT::encode($refreshTokenPayload, $this->container->environment['JWT_SECRET_KEY']);
+        $refreshToken = JWT::encode($refreshTokenPayload, $this->container->environment['APP_JWT_SECRET']);
 
         return $this->save($accessToken, $refreshToken, $expireDate, true, $user->getId());
+    }
+
+    /**
+     * Verifica se o refreshToken existe no banco de dados
+     *
+     * @param string $refreshToken
+     * @return boolean
+     */
+    public function verifyRefreshToken(string $refreshToken) : bool
+    {
+        $token = $this->getRepository()->findOneBy([
+            'refreshToken' => $refreshToken
+        ]);
+
+        return !empty($token);
+    }
+
+    /**
+     * Retorna o payload do refresh token
+     *
+     * @param string $refreshToken
+     * @return object
+     */
+    public function getRefreshTokenDecoded(string $refreshToken) : object
+    {
+        return JWT::decode(
+            $refreshToken,
+            $this->container->environment['APP_JWT_SECRET'],
+            ['HS256']
+        );
     }
 }
